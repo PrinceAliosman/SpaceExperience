@@ -2,7 +2,7 @@
 body {
     color: white;
     background-image: url("https://th.bing.com/th/id/OIP.rtlK6jIrhxBxMGx3b8mlmAHaEo?rs=1&pid=ImgDetMain");
-  }
+}
 footer {
   border-color: rgb(163, 163, 163);
 }
@@ -42,13 +42,27 @@ body, html {
   width:225px;
   border-style: solid;
   border-color: rgb(163, 163, 163);
+  margin : 20px;
 }
 
 /*planet info css */
-.planetary{
-  position: relative;
-  width: 100%;
-  height: 50%;
-  backface-visibility: hidden;
+.solarsystem2 {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
 }
 
+/*team info css */
+.team-text  {
+  font-size: 40px
+}
+.form-control {
+  background-color: #989898;
+  color: #fff;
+}
+
+.large{
+  width: 50%;
+  height: 550px;
+}
