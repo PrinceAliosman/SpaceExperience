@@ -53,6 +53,14 @@ body, html {
   width: 50%;
 }
 
+.hero2 {
+  background-image: url(https://media.timeout.com/images/105653190/image.jpg); 
+  background-size: cover;
+  background-position: center;
+  height: 100vh; 
+}
+
+
 /*team info css */
 .team-text  {
   font-size: 40px
@@ -65,4 +73,12 @@ body, html {
 .large{
   width: 50%;
   height: 550px;
+}
+
+h2{
+  font-family: "Lucida Sans";
+}
+
+a{
+  color:white;
 }
