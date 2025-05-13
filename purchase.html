@@ -42,13 +42,13 @@
         <h3>
           $400,000
         </h3><br>
-        <button type="button" class="btn btn-secondary">Proceed to Purchase</button>
+        <button type="button" class="btn btn-secondary add-to-cart" data-item="Mercury" data-price="400000">Add to Cart</button>
       </div> 
       <div class="col-lg-6">
         <img class="purchase-img float-start" src="https://cosmosmagazine.com/wp-content/uploads/2020/04/venus_resized.jpg">
         <br><h1> Venus</h1>
         <h3>$350,000</h3><br>
-        <button type="button" class="btn btn-secondary">Proceed to Purchase</button>
+        <button type="button" class="btn btn-secondary add-to-cart" data-item="Venus" data-price="350000">Add to Cart</button>
       </div>
     </div>
   </div>
@@ -61,13 +61,13 @@
         <h3>
           $500,000
         </h3><br>
-        <button type="button" class="btn btn-secondary">Proceed to Purchase</button>
+        <button type="button" class="btn btn-secondary add-to-cart" data-item="Mars" data-price="500000">Add to Cart</button>
       </div> 
       <div class="col-lg-6">
         <img class="purchase-img float-start" src="https://th.bing.com/th/id/OIP.5lNphcWjPNOoKbmg7uEsrAHaHa?rs=1&pid=ImgDetMain">
         <br><h1>Jupiter</h1>
-        <h3>$690,000</h3><br>
-        <button type="button" class="btn btn-secondary">Proceed to Purchase</button>
+        <h3>$700,000</h3><br>
+        <button type="button" class="btn btn-secondary add-to-cart" data-item="Jupiter" data-price="700000">Add to Cart</button>
       </div>
     </div>
   </div>
@@ -78,13 +78,13 @@
         <img class="purchase-img float-start" src="https://th.bing.com/th/id/OIP.8rmJnBWJxwcFqVQPPm463gHaFL?rs=1&pid=ImgDetMain">
         <br><h1>Saturn</h1>
         <h3>$850,000</h3><br>
-        <button type="button" class="btn btn-secondary">Proceed to Purchase</button>
+        <button type="button" class="btn btn-secondary add-to-cart" data-item="Saturn" data-price="850000">Add to Cart</button>
       </div>
       <div class="col-lg-6">
         <img class="purchase-img float-start" src="https://planetfacts.org/wp-content/uploads/2023/12/uranus_planet.jpg">
-        <br><h1>Uranus</h1>
+        <br><h1>Uranus (George) </h1>
         <h3>$975,000</h3><br>
-        <button type="button" class="btn btn-secondary">Proceed to Purchase</button>
+        <button type="button" class="btn btn-secondary add-to-cart" data-item="Uranus (George)" data-price="975000">Add to Cart</button>
       </div>
     </div>
   </div>
@@ -95,7 +95,7 @@
         <img class="purchase-img float-start" src="https://th.bing.com/th/id/R.b2100128d75fb70f8bd222cdb47c0870?rik=UIBbJGsmma3PKg&pid=ImgRaw&r=0">
         <br><h1>Neptune</h1>
         <h3>$1,500,000</h3><br>
-        <button type="button" class="btn btn-secondary">Proceed to Purchase</button>
+        <button type="button" class="btn btn-secondary add-to-cart" data-item="Neptune" data-price="1500000">Add to Cart</button>
       </div>
     </div>
     <br>
@@ -103,6 +103,12 @@
         <a href="package.html"><button type="button" class="btn btn-dark">Purchase a Package Instead?</button></a>
       </div>
     </div>
+    <div id="cart" class="container mt-5">
+  <h2>Your Cart</h2>
+  <ul id="cart-items" class="list-group"></ul>
+  <h3 id="total-price">Total: $0</h3>
+  <button id="checkout" class="btn btn-success mt-3">Checkout</button>
+</div>
     <br><br>
     <footer class="bg-secondary text-white py-3">
       <div class="container d-flex justify-content-between align-items-center">
@@ -115,5 +121,56 @@
       </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cartItems = document.getElementById("cart-items");
+    const totalPriceElement = document.getElementById("total-price");
+    let totalPrice = 0;
+
+    // Add to Cart functionality
+    document.querySelectorAll(".add-to-cart").forEach(button => {
+      button.addEventListener("click", () => {
+        const itemName = button.getAttribute("data-item");
+        const itemPrice = parseInt(button.getAttribute("data-price"));
+
+        // Create a list item for the cart
+        const listItem = document.createElement("li");
+        listItem.className = "list-group-item d-flex justify-content-between align-items-center";
+
+        // Add item name and price
+        listItem.innerHTML = `
+          ${itemName} - $${itemPrice.toLocaleString()}
+          <button class="btn btn-danger btn-sm remove-item">Remove</button>
+        `;
+
+        // Append the item to the cart
+        cartItems.appendChild(listItem);
+
+        // Update total price
+        totalPrice += itemPrice;
+        totalPriceElement.textContent = `Total: $${totalPrice.toLocaleString()}`;
+
+        // Add event listener to the "Remove" button
+        listItem.querySelector(".remove-item").addEventListener("click", () => {
+          cartItems.removeChild(listItem);
+          totalPrice -= itemPrice;
+          totalPriceElement.textContent = `Total: $${totalPrice.toLocaleString()}`;
+        });
+      });
+    });
+
+    // Checkout functionality
+    document.getElementById("checkout").addEventListener("click", () => {
+      if (cartItems.children.length === 0) {
+        alert("Your cart is empty!");
+      } else {
+        alert("Thank you for your purchase!");
+        cartItems.innerHTML = ""; // Clear the cart
+        totalPrice = 0;
+        totalPriceElement.textContent = "Total: $0";
+      }
+    });
+  });
+    </script>
   </body>
 </html>
