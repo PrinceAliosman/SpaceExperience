@@ -101,3 +101,11 @@ a{
 .monaco{
   font-family:'Courier New', Courier, monospace;
 }
+
+iframe{
+  align-content: center;
+}
+
+#cart{
+  color: white;
+}

@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-secondary">
+    <nav id="sticky" class="navbar navbar-expand bg-secondary">
       <div class="container-fluid">
         <a class="navbar-brand" href="index.html"><img src="https://media-hosting.imagekit.io/e7c76f4d0c8c4e41/result.png?Expires=1840465538&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=eOqrAb-UNuRz-5IhqwEnwTBh3KBQz1LhTqM8Rz87e6Znf9fiBgDl2KtxPQ1mMMyiWThvYF3B9K-yCvdMnYyXOLVbE6R-NvBJ~sCRjrY~xFv2fFt8bPZO0hImbGjnXwpjjA4W0lodxmJ1fDjAllEimxXsZJNFpR1IIqp0TbgJzrsgPy4~kSPMNHIYrtvHBPJ3UtwjQ6tLLbwXmROBa9K1tnMOO2EHaviUPw5lugHO2bJZTTmgKoYKrnzxXKS5VDFsEzTdTMQ7xxoCQlRv-YQCQL-9PpnDv32Rc6wjAdKl20m4C8kFK0EzvV6dWU3Tf8i3zIwDeg9pmF2HlsP8c4Z89w__" width="100px"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,10 +21,51 @@
             <a class="nav-link" href="purchase.html"><button type="button" class="btn btn-dark">Purchase Trips</button></a>
             <a class="nav-link" href="package.html"><button type="button" class="btn btn-dark">Purchase A Package</button></a>
             <a class="nav-link" href="team.html"><button type="button" class="btn btn-dark">About Us</button></a>
+            <a class="nav-link" href="cart.html">
+              <button type="button" class="btn btn-warning position-relative">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  0
+                </span>
+              </button>
+            </a>
+            </a>
           </div>
         </div>
       </div>
     </nav>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const cartCountElement = document.getElementById("cart-count");
+      let cartCount = parseInt(localStorage.getItem("cartCount")) || 0;
+  
+      // Update the cart count badge on page load
+      cartCountElement.textContent = cartCount;
+  
+      // Add to Cart functionality
+      document.querySelectorAll(".add-to-cart").forEach(button => {
+        button.addEventListener("click", () => {
+          const itemName = button.getAttribute("data-item");
+          const itemPrice = parseInt(button.getAttribute("data-price"));
+  
+          // Increment the cart count
+          cartCount++;
+          cartCountElement.textContent = cartCount;
+  
+          // Save the updated cart count to localStorage
+          localStorage.setItem("cartCount", cartCount);
+  
+          // Add the item to the cart in localStorage
+          const cart = JSON.parse(localStorage.getItem("cart")) || [];
+          cart.push({ name: itemName, price: itemPrice });
+          localStorage.setItem("cart", JSON.stringify(cart));
+  
+          
+        });
+      });
+    });
+  </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
 
     <br>
@@ -36,10 +77,12 @@
           <h2>Out of this World Bundle</h2>
           <p>
               <div class="opacity-50">Deep-Space Rocket Model-17</div>
-          </p> 
-
+          </p>
           <p>
-            50% Off!
+              50% OFF!
+          </p>
+          <p>
+            $1,760,000
           </p>
           <p>
             <button type="button" class="btn btn-secondary add-to-cart" data-item="Out of this World Bundle" data-price="1760000">Add to Cart</button>
@@ -64,6 +107,9 @@
             This package includes a laser gun (with a custom design of your choice), a battery bank, and a small package of attachments for the gun.
           </p>
           <p>
+            $350,000
+          </p>
+          <p>
             <button type="button" class="btn btn-secondary add-to-cart" data-item="Laser Gun" data-price="350000">Add to Cart</button>
           </p>
         </div>
@@ -78,6 +124,9 @@
           <h3>Space House</h3>
           <p>
             This package includes a space home (with custom style of your choice), a kitchen, a garage, a bathroom, a living room and a bedroom.
+          </p>
+          <p>
+            $750,000
           </p>
           <p>
             <button type="button" class="btn btn-secondary add-to-cart" data-item="Space House" data-price="750000">Add to Cart</button>
@@ -98,6 +147,9 @@
             This package includes a Rocket (with a custom design of your choice), number of seats as you wish and a radio while traveling.
           </p>
           <p>
+            $750,000
+          </p>
+          <p>
             <button type="button" class="btn btn-secondary add-to-cart" data-item="Rocket Ship" data-price="750000">Add to Cart</button>
           </p>
         </div>
@@ -114,26 +166,12 @@
             This package includes food (lasts up to a year) already made and ready to eat at anytime.
           </p>
           <p>
+              $250,000
+          </p>    
+          <p>
             <button type="button" class="btn btn-secondary add-to-cart" data-item="Food" data-price="250000">Add to Cart</button>
           </p>
         </div>
-      </div>
-    </div>
-
-  <div id="cart" class="container mt-5">
-  <h2>Your Cart</h2>
-  <ul id="cart-items" class="list-group"></ul>
-  <h3 id="total-price">Total: $0</h3>
-  <button id="checkout" class="btn btn-success mt-3">Checkout</button>
-  </div>
-  <br><br>
-  <footer class="bg-secondary text-white py-3">
-    <div class="container d-flex justify-content-between align-items-center">
-      <a href="index.html"><img src="https://media-hosting.imagekit.io/e7c76f4d0c8c4e41/result.png?Expires=1840465538&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=eOqrAb-UNuRz-5IhqwEnwTBh3KBQz1LhTqM8Rz87e6Znf9fiBgDl2KtxPQ1mMMyiWThvYF3B9K-yCvdMnYyXOLVbE6R-NvBJ~sCRjrY~xFv2fFt8bPZO0hImbGjnXwpjjA4W0lodxmJ1fDjAllEimxXsZJNFpR1IIqp0TbgJzrsgPy4~kSPMNHIYrtvHBPJ3UtwjQ6tLLbwXmROBa9K1tnMOO2EHaviUPw5lugHO2bJZTTmgKoYKrnzxXKS5VDFsEzTdTMQ7xxoCQlRv-YQCQL-9PpnDv32Rc6wjAdKl20m4C8kFK0EzvV6dWU3Tf8i3zIwDeg9pmF2HlsP8c4Z89w__" alt="The Space Experience Logo" width="150"></a>
-      <div>
-        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
-        <a href="#" class="text-white me-3"><i class="fab fa-youtube fa-lg"></i></a>
-        <a href="#" class="text-white"><i class="fab fa-instagram fa-lg"></i></a>
       </div>
     </div>
   </footer>
@@ -143,30 +181,30 @@
     const totalPriceElement = document.getElementById("total-price");
     let totalPrice = 0;
 
-    // Add to Cart functionality
+ 
     document.querySelectorAll(".add-to-cart").forEach(button => {
       button.addEventListener("click", () => {
         const itemName = button.getAttribute("data-item");
         const itemPrice = parseInt(button.getAttribute("data-price"));
 
-        // Create a list item for the cart
+  
         const listItem = document.createElement("li");
         listItem.className = "list-group-item d-flex justify-content-between align-items-center";
 
-        // Add item name and price
+  
         listItem.innerHTML = `
           ${itemName} - $${itemPrice.toLocaleString()}
           <button class="btn btn-danger btn-sm remove-item">Remove</button>
         `;
 
-        // Append the item to the cart
+  
         cartItems.appendChild(listItem);
 
-        // Update total price
+
         totalPrice += itemPrice;
         totalPriceElement.textContent = `Total: $${totalPrice.toLocaleString()}`;
 
-        // Add event listener to the "Remove" button
+
         listItem.querySelector(".remove-item").addEventListener("click", () => {
           cartItems.removeChild(listItem);
           totalPrice -= itemPrice;
@@ -175,13 +213,13 @@
       });
     });
 
-    // Checkout functionality
+
     document.getElementById("checkout").addEventListener("click", () => {
       if (cartItems.children.length === 0) {
         alert("Your cart is empty!");
       } else {
         alert("Thank you for your purchase!");
-        cartItems.innerHTML = ""; // Clear the cart
+        cartItems.innerHTML = ""; 
         totalPrice = 0;
         totalPriceElement.textContent = "Total: $0";
       }
