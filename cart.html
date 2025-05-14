@@ -33,70 +33,77 @@
       </div>
     </nav>
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const cartItems = document.getElementById("cart-items");
-        const totalPriceElement = document.getElementById("total-price");
-        const cartCountElement = document.getElementById("cart-count");
-        let totalPrice = 0;
-        let cartCount = parseInt(localStorage.getItem("cartCount")) || 0;
+  document.addEventListener("DOMContentLoaded", () => {
+    const cartItems = document.getElementById("cart-items");
+    const totalPriceElement = document.getElementById("total-price");
+    const cartCountElement = document.getElementById("cart-count");
+    let totalPrice = 0;
+    let cartCount = parseInt(localStorage.getItem("cartCount")) || 0;
+
     
-        // Update the cart count badge on page load
+    cartCountElement.textContent = cartCount;
+
+    
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.forEach((item, index) => {
+      const listItem = document.createElement("li");
+      listItem.className = "list-group-item d-flex justify-content-between align-items-center";
+      listItem.innerHTML = `
+        ${item.name} - $${item.price.toLocaleString()}
+        <button class="btn btn-danger btn-sm remove-item" data-index="${index}">Remove</button>
+      `;
+      cartItems.appendChild(listItem);
+
+      totalPrice += item.price;
+
+      
+      listItem.querySelector(".remove-item").addEventListener("click", (e) => {
+        const itemIndex = parseInt(e.target.getAttribute("data-index"));
+
+        
+        cart.splice(itemIndex, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        
+        cartCount--;
+        localStorage.setItem("cartCount", cartCount);
         cartCountElement.textContent = cartCount;
-    
-        // Load cart items from localStorage
-        const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        cart.forEach((item, index) => {
-          const listItem = document.createElement("li");
-          listItem.className = "list-group-item d-flex justify-content-between align-items-center";
-          listItem.innerHTML = `
-            ${item.name} - $${item.price.toLocaleString()}
-            <button class="btn btn-danger btn-sm remove-item" data-index="${index}">Remove</button>
-          `;
-          cartItems.appendChild(listItem);
-    
-          totalPrice += item.price;
-    
-          // Add remove functionality
-          listItem.querySelector(".remove-item").addEventListener("click", (e) => {
-            const itemIndex = parseInt(e.target.getAttribute("data-index"));
-    
-            // Remove the item from the cart array
-            cart.splice(itemIndex, 1);
-            localStorage.setItem("cart", JSON.stringify(cart));
-    
-            // Update the cart count
-            cartCount--;
-            localStorage.setItem("cartCount", cartCount);
-            cartCountElement.textContent = cartCount;
-    
-            // Remove the item from the DOM
-            cartItems.removeChild(listItem);
-    
-            // Update the total price
-            totalPrice -= item.price;
-            totalPriceElement.textContent = `Total: $${totalPrice.toLocaleString()}`;
-          });
-        });
-    
+
+        
+        cartItems.removeChild(listItem);
+
+        
+        totalPrice -= item.price;
         totalPriceElement.textContent = `Total: $${totalPrice.toLocaleString()}`;
-    
-        document.getElementById("checkout").addEventListener("click", () => {
-          if (cartItems.children.length === 0) {
-            alert("Your cart is empty!");
-          } else {
-            alert("Thank you for your purchase!");
-            cartItems.innerHTML = "";
-            totalPrice = 0;
-            cartCount = 0;
-            totalPriceElement.textContent = "Total: $0";
-            cartCountElement.textContent = cartCount;
-    
-            // Clear localStorage
-            localStorage.removeItem("cart");
-            localStorage.setItem("cartCount", cartCount);
-          }
+
+        
+        Array.from(cartItems.children).forEach((child, newIndex) => {
+          child.querySelector(".remove-item").setAttribute("data-index", newIndex);
         });
       });
+    });
+
+    totalPriceElement.textContent = `Total: $${totalPrice.toLocaleString()}`;
+
+    
+    document.getElementById("checkout").addEventListener("click", () => {
+      if (cartItems.children.length === 0) {
+        alert("Your cart is empty!");
+      } else {
+        alert("Thank you for your purchase!");
+        cartItems.innerHTML = "";
+        totalPrice = 0;
+        cartCount = 0;
+        totalPriceElement.textContent = "Total: $0";
+        cartCountElement.textContent = cartCount;
+
+        
+        localStorage.removeItem("cart");
+        localStorage.setItem("cartCount", cartCount);
+      }
+    });
+  });
+</script>
     </script>    <div id="cart" class="container mt-5">
   <h2>Your Cart</h2>
   <ul id="cart-items" class="list-group"></ul>
