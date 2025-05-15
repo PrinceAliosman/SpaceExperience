@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>The Space Experience! - Home</title>
+    <link rel="icon" type="image/x-icon" href="https://media-hosting.imagekit.io/e7c76f4d0c8c4e41/result.png?Expires=1840465538&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=eOqrAb-UNuRz-5IhqwEnwTBh3KBQz1LhTqM8Rz87e6Znf9fiBgDl2KtxPQ1mMMyiWThvYF3B9K-yCvdMnYyXOLVbE6R-NvBJ~sCRjrY~xFv2fFt8bPZO0hImbGjnXwpjjA4W0lodxmJ1fDjAllEimxXsZJNFpR1IIqp0TbgJzrsgPy4~kSPMNHIYrtvHBPJ3UtwjQ6tLLbwXmROBa9K1tnMOO2EHaviUPw5lugHO2bJZTTmgKoYKrnzxXKS5VDFsEzTdTMQ7xxoCQlRv-YQCQL-9PpnDv32Rc6wjAdKl20m4C8kFK0EzvV6dWU3Tf8i3zIwDeg9pmF2HlsP8c4Z89w__">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
@@ -36,42 +37,79 @@
       </div>
     </nav>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const cartCountElement = document.getElementById("cart-count");
-      let cartCount = parseInt(localStorage.getItem("cartCount")) || 0;
-  
-      // Update the cart count badge on page load
-      cartCountElement.textContent = cartCount;
-  
-      // Add to Cart functionality
-      document.querySelectorAll(".add-to-cart").forEach(button => {
-        button.addEventListener("click", () => {
-          const itemName = button.getAttribute("data-item");
-          const itemPrice = parseInt(button.getAttribute("data-price"));
-  
-          // Increment the cart count
-          cartCount++;
-          cartCountElement.textContent = cartCount;
-  
-          // Save the updated cart count to localStorage
-          localStorage.setItem("cartCount", cartCount);
-  
-          // Add the item to the cart in localStorage
-          const cart = JSON.parse(localStorage.getItem("cart")) || [];
-          cart.push({ name: itemName, price: itemPrice });
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Cart counter in navbar
+    const cartCountElement = document.getElementById("cart-count");
+    let cartCount = parseInt(localStorage.getItem("cartCount")) || 0;
+    cartCountElement.textContent = cartCount;
+
+    const cartItems = document.getElementById("cart-items");
+    const totalPriceElement = document.getElementById("total-price");
+    if (cartItems && totalPriceElement) {
+      let totalPrice = 0;
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.forEach((item, index) => {
+        const listItem = document.createElement("li");
+        listItem.className = "list-group-item d-flex justify-content-between align-items-center";
+        listItem.innerHTML = `
+          ${item.name} - $${item.price.toLocaleString()}
+          <button class="btn btn-danger btn-sm remove-item" data-index="${index}">Remove</button>
+        `;
+        cartItems.appendChild(listItem);
+
+        totalPrice += item.price;
+
+        listItem.querySelector(".remove-item").addEventListener("click", (e) => {
+          const itemIndex = parseInt(e.target.getAttribute("data-index"));
+
+          cart.splice(itemIndex, 1);
           localStorage.setItem("cart", JSON.stringify(cart));
-  
-          
+
+          cartCount = Math.max(0, cartCount - 1);
+          localStorage.setItem("cartCount", cartCount);
+          cartCountElement.textContent = cartCount;
+
+          cartItems.removeChild(listItem);
+
+          totalPrice -= item.price;
+          totalPriceElement.textContent = `Total: $${totalPrice.toLocaleString()}`;
+
+          Array.from(cartItems.children).forEach((child, newIndex) => {
+            child.querySelector(".remove-item").setAttribute("data-index", newIndex);
+          });
         });
       });
-    });
+
+      totalPriceElement.textContent = `Total: $${totalPrice.toLocaleString()}`;
+
+      const checkoutBtn = document.getElementById("checkout");
+      if (checkoutBtn) {
+        checkoutBtn.addEventListener("click", () => {
+          if (cartItems.children.length === 0) {
+            alert("Your cart is empty!");
+          } else {
+            alert("Thank you for your purchase!");
+            cartItems.innerHTML = "";
+            totalPrice = 0;
+            cartCount = 0;
+            totalPriceElement.textContent = "Total: $0";
+            cartCountElement.textContent = cartCount;
+
+            
+            localStorage.setItem("cartCount", "0");
+            localStorage.setItem("cart", JSON.stringify([]));
+          }
+        });
+      }
+    }
+  });
   </script>
     <main>
-    <div class="container text-center">
+    <div class="container text-center monaco">
       <div class="row">
         <div class="col">
-          <h1 class="fonty">Welcome to The Space Experience,</h1>
+          <h1>Welcome to The Space Experience,</h1>
           <h2>the place to book a trip to space!</h2>
           <h4>In this website, you can learn and experience space and its planets</h4>
           <img class="solarsystem" src="https://th.bing.com/th/id/OIP.O6xd3vUXgH1xWOR6YvgcmAHaEK?rs=1&pid=ImgDetMain" width="900" alt="solar system with names">
@@ -80,17 +118,17 @@
     </div>
     <div class="container">
       <div class="row">
-        <div class="col-4">
+        <div class="col-4 monaco">
           <img class="surfacemars" src="https://th.bing.com/th/id/OIP._-nIpAMb_21v8Razb3CMYAHaEK?rs=1&pid=ImgDetMain" width="450" height="300" alt="surface of mars">
           <h3>Surface of Mars</h3>
           <p>This is the surface of Mars which is rocky and has a very red atmosphere compared to Earth.</p>
         </div>
-        <div class="col-4">
+        <div class="col-4 monaco">
           <img class="surfacejupiter" src="https://images.livemint.com/img/2019/11/20/1600x900/76587ad4-bd20-11e9-be68-67bc3b8e042c_1565936136357_1574252881555.jpg" width="450" height="300" alt="surface of jupiter">
           <h3>Surface of Jupiter</h3>
           <p>This is what Jupiter would look like from Europa, one of Jupiter's moons.</p>
         </div>
-        <div class="col-4">
+        <div class="col-4 monaco">
           <img class="surfacevenus" src="https://i.ytimg.com/vi/wy8kdgdMbCE/maxresdefault.jpg" width="375" height="300" alt="surface of venus">
           <h3>Surface of Venus</h3>
           <p>Venus is a hot, rocky planet about the same size as Earth and it is covered in thick clouds.</p>
@@ -100,7 +138,7 @@
     <br>
     <br>
     <br>
-    <h1>
+    <h1 class="monaco">
       Reviews from our past explorers!
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Plain_Yellow_Star.png/20px-Plain_Yellow_Star.png" alt="Star" width="40">
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Plain_Yellow_Star.png/20px-Plain_Yellow_Star.png" alt="Star" width="40">
