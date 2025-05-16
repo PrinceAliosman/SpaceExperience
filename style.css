@@ -6,12 +6,7 @@ body {
 footer {
   border-color: rgb(163, 163, 163);
 }
-#sticky {
-  position: sticky;
-  top: 1;
-  overflow: hidden;
-  z-index: index 1000000000000; ;
-}
+
 /*home page*/  
 .solarsystem{
     padding-bottom: 100px;
@@ -108,4 +103,5 @@ iframe{
 
 #cart{
   color: white;
+  padding-bottom: 408px;
 }
